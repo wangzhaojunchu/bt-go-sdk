@@ -59,3 +59,10 @@ type ReqSiteBackups struct {
 	ToJS   string
 	Search int64 // 必填
 }
+
+type ReqSiteSSL struct {
+	Type     int    `json:"type"`
+	SiteName string `json:"siteName"`
+	Key      string `json:"key"`
+	Csr      string `json:"csr"`
+}

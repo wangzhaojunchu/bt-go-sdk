@@ -4,13 +4,14 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
-	jsoniter "github.com/json-iterator/go"
 	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"strconv"
 	"time"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
@@ -74,6 +75,43 @@ func (this *Client) btAPI(data map[string][]string, endpoint string) ([]byte, er
 		return nil, err
 	}
 	return respBody, nil
+}
+func (this *Client) BtAPI(data map[string][]string, endpoint string) ([]byte, error) {
+	return this.btAPI(data, endpoint)
+}
+
+func (this *Client) SetSSL(params ReqSiteSSL) (RespMSG, error) {
+	var msg RespMSG
+
+	var data map[string][]string = map[string][]string{
+		"type":     {string(params.Type)},
+		"key":      {params.Key},
+		"csr":      {params.Csr},
+		"siteName": {params.SiteName},
+	}
+	resp, err := this.btAPI(data, "/site?action=SetSSL")
+	if err != nil {
+		return msg, err
+	}
+
+	err = json.Unmarshal(resp, &msg)
+	return msg, err
+}
+func (this *Client) ApplyCertApi(domains []string, id int) (RespApplyCert, error) {
+	var msg RespApplyCert
+	var data map[string][]string = map[string][]string{
+		"domains":       domains,
+		"auth_type":     {"http"},
+		"auth_to":       domains,
+		"auto_wildcard": {"0"},
+		"id":            {string(id)},
+	}
+	resp, err := this.btAPI(data, "/acme?action=apply_cert_api")
+	if err != nil {
+		return msg, err
+	}
+	err = json.Unmarshal(resp, &msg)
+	return msg, err
 }
 
 // Deprecated: Used only for debug

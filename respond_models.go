@@ -175,3 +175,14 @@ type RespLimitNet struct {
 	Perserver int `json:"perserver"`
 	Perip     int `json:"perip"`
 }
+
+type RespApplyCert struct {
+	Cert        string   `json:"cert"`
+	Root        string   `json:"root"`
+	CertTimeout int      `json:"cert_timeout"`
+	PrivateKey  string   `json:"private_key"`
+	Domains     []string `json:"domains"`
+	SavePath    string   `json:"save_path"`
+	Status      bool     `json:"status"`
+	Msg         string   `json:"msg"`
+}
