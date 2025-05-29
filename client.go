@@ -98,6 +98,20 @@ func (this *Client) SetSSL(params ReqSiteSSL) (RespMSG, error) {
 	err = json.Unmarshal(resp, &msg)
 	return msg, err
 }
+
+func (this *Client) HttpToHttps(siteName string) (RespMSG,error){
+	var msg RespMSG
+	var data map[string][]string = map[string][]string {
+		"siteName":{siteName}
+	}
+
+	resp,err := this.btAPI(data, "/site?action=HttpToHttps")
+	if err != nil{
+		return msg,error
+	}
+	err = json.Unmarshal(resp, &msg)
+	return msg,err
+}
 func (this *Client) ApplyCertApi(domains []string, id int64) (RespApplyCert, error) {
 	var msg RespApplyCert
 	domainss, err := json.Marshal(domains)
