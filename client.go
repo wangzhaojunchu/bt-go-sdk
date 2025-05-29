@@ -100,14 +100,18 @@ func (this *Client) SetSSL(params ReqSiteSSL) (RespMSG, error) {
 }
 func (this *Client) ApplyCertApi(domains []string, id int64) (RespApplyCert, error) {
 	var msg RespApplyCert
+	domainss, err := json.Marshal(domains)
+	if err != nil {
+		return msg, err
+	}
 	var data map[string][]string = map[string][]string{
-		"domains":       domains,
+		"domains":       {string(domainss)},
 		"auth_type":     {"http"},
-		"auth_to":       domains,
+		"auth_to":       {string(domainss)},
 		"auto_wildcard": {"0"},
 		"id":            {fmt.Sprintf("%d", id)},
 	}
-	resp, err := this.btAPI(data, "acme?action=apply_cert_api")
+	resp, err := this.btAPI(data, "/acme?action=apply_cert_api")
 	if err != nil {
 		return msg, err
 	}
