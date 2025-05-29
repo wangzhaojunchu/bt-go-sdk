@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
@@ -84,7 +85,7 @@ func (this *Client) SetSSL(params ReqSiteSSL) (RespMSG, error) {
 	var msg RespMSG
 
 	var data map[string][]string = map[string][]string{
-		"type":     {string(params.Type)},
+		"type":     {fmt.Sprintf("%d", params.Type)},
 		"key":      {params.Key},
 		"csr":      {params.Csr},
 		"siteName": {params.SiteName},
@@ -97,14 +98,14 @@ func (this *Client) SetSSL(params ReqSiteSSL) (RespMSG, error) {
 	err = json.Unmarshal(resp, &msg)
 	return msg, err
 }
-func (this *Client) ApplyCertApi(domains []string, id int) (RespApplyCert, error) {
+func (this *Client) ApplyCertApi(domains []string, id int64) (RespApplyCert, error) {
 	var msg RespApplyCert
 	var data map[string][]string = map[string][]string{
 		"domains":       domains,
 		"auth_type":     {"http"},
 		"auth_to":       domains,
 		"auto_wildcard": {"0"},
-		"id":            {string(id)},
+		"id":            {fmt.Sprintf("%d", id)},
 	}
 	resp, err := this.btAPI(data, "/acme?action=apply_cert_api")
 	if err != nil {
