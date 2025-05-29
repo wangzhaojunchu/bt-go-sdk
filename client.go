@@ -102,12 +102,12 @@ func (this *Client) SetSSL(params ReqSiteSSL) (RespMSG, error) {
 func (this *Client) HttpToHttps(siteName string) (RespMSG,error){
 	var msg RespMSG
 	var data map[string][]string = map[string][]string {
-		"siteName":{siteName}
+		"siteName":{siteName},
 	}
 
 	resp,err := this.btAPI(data, "/site?action=HttpToHttps")
 	if err != nil{
-		return msg,error
+		return msg,err
 	}
 	err = json.Unmarshal(resp, &msg)
 	return msg,err
