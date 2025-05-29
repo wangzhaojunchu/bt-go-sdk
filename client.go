@@ -107,7 +107,7 @@ func (this *Client) ApplyCertApi(domains []string, id int64) (RespApplyCert, err
 		"auto_wildcard": {"0"},
 		"id":            {fmt.Sprintf("%d", id)},
 	}
-	resp, err := this.btAPI(data, "/acme?action=apply_cert_api")
+	resp, err := this.btAPI(data, "acme?action=apply_cert_api")
 	if err != nil {
 		return msg, err
 	}

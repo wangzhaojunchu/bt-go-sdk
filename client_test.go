@@ -97,7 +97,15 @@ func TestClient_GetPHPVersion(t *testing.T) {
 	}
 	fmt.Println(r)
 }
-
+func TestClient_ApplyCertApi(t *testing.T) {
+	r, err := client.ApplyCertApi([]string{"11.wday.top", "m.11.wday.top", "www.11.wday.top"}, 51)
+	if err != nil || !r.Status {
+		fmt.Println(err)
+		fmt.Println(r.Status)
+		t.Fail()
+	}
+	fmt.Println(r)
+}
 func TestClient_AddSite(t *testing.T) {
 	r, err := client.AddSite(&ReqAddSite{
 		WebName: struct {
