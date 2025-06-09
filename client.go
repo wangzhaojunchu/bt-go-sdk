@@ -99,18 +99,18 @@ func (this *Client) SetSSL(params ReqSiteSSL) (RespMSG, error) {
 	return msg, err
 }
 
-func (this *Client) HttpToHttps(siteName string) (RespMSG,error){
+func (this *Client) HttpToHttps(siteName string) (RespMSG, error) {
 	var msg RespMSG
-	var data map[string][]string = map[string][]string {
-		"siteName":{siteName},
+	var data map[string][]string = map[string][]string{
+		"siteName": {siteName},
 	}
 
-	resp,err := this.btAPI(data, "/site?action=HttpToHttps")
-	if err != nil{
-		return msg,err
+	resp, err := this.btAPI(data, "/site?action=HttpToHttps")
+	if err != nil {
+		return msg, err
 	}
 	err = json.Unmarshal(resp, &msg)
-	return msg,err
+	return msg, err
 }
 func (this *Client) ApplyCertApi(domains []string, id int64) (RespApplyCert, error) {
 	var msg RespApplyCert
@@ -672,4 +672,27 @@ func MD5(s string) string {
 	h := md5.New()
 	h.Write([]byte(s))
 	return hex.EncodeToString(h.Sum(nil))
+}
+
+func (this *Client) CreateDir(path string) (RespMSG, error) {
+	data := map[string][]string{
+		"path": {path},
+	}
+	resp, _ := this.btAPI(data, "/files?action=CreateDir")
+	var dec RespMSG
+	if err := json.Unmarshal(resp, &dec); err != nil {
+		return RespMSG{}, err
+	}
+	return dec, nil
+}
+func (this *Client) CreateFile(path string) (RespMSG, error) {
+	data := map[string][]string{
+		"path": {path},
+	}
+	resp, _ := this.btAPI(data, "files?action=CreateFile")
+	var dec RespMSG
+	if err := json.Unmarshal(resp, &dec); err != nil {
+		return RespMSG{}, err
+	}
+	return dec, nil
 }
